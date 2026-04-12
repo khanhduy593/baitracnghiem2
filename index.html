@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Toán</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Màn hình mở đầu -->
+    <div id="startScreen" class="start-screen">
+        <h1>BÀI ÔN TRẮC NGHIỆM TOÁN</h1>
+        <p>Người làm web: KhanhDuy</p>
+        <button onclick="startQuiz()" id="startBtn">🚀 Bắt đầu làm bài</button>
+    </div>
+
+    <!-- App -->
+    <div class="container" id="quizApp" style="display:none;">
+        <div class="sidebar" id="sidebar"></div>
+
+        <div class="quiz-container">
+
+            <div class="progress">
+                <div id="progressBar"></div>
+            </div>
+            <p id="progressText"></p>
+
+            <h2 id="question"></h2>
+            <div id="answers"></div>
+
+            <div class="buttons">
+                <button id="prevBtn" onclick="prevQuestion()">⬅ Quay lại</button>
+                <button id="nextBtn" onclick="nextQuestion()">Tiếp theo ➡</button>
+                <button id="submitBtn" onclick="submitQuiz()" style="display:none;">✅ Nộp bài</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
