@@ -1,234 +1,122 @@
-// 🔊 âm thanh
-const soundPass = new Audio("https://www.soundjay.com/human/sounds/applause-8.mp3");
-const soundFail = new Audio("https://www.soundjay.com/misc/sounds/fail-buzzer-01.mp3");
+const questionBank = [
+    { q: "Kết quả của phép tính: 452 + 316 là?", a: ["768", "769", "758", "668"], correct: 0 },
+    { q: "Tìm x, biết: x : 4 = 12", a: ["x = 3", "x = 8", "x = 48", "x = 16"], correct: 2 },
+    { q: "Số lớn nhất trong các số: 8521, 8512, 8251, 8152 là?", a: ["8512", "8521", "8251", "8152"], correct: 1 },
+    { q: "Một hình vuông có cạnh 6cm. Chu vi hình vuông đó là?", a: ["12cm", "24cm", "36cm", "20cm"], correct: 1 },
+    { q: "Tháng nào sau đây có 31 ngày?", a: ["Tháng 4", "Tháng 6", "Tháng 8", "Tháng 9"], correct: 2 },
+    { q: "Giá trị của biểu thức 100 - 20 * 3 là?", a: ["240", "40", "60", "80"], correct: 1 },
+    { q: "8m 5cm = ... cm?", a: ["85cm", "805cm", "850cm", "8005cm"], correct: 1 },
+    { q: "Có 24 cái kẹo chia đều cho 4 bạn. Hỏi mỗi bạn có mấy cái kẹo?", a: ["4 cái", "5 cái", "6 cái", "8 cái"], correct: 2 },
+    { q: "Số liền sau của số 999 là?", a: ["998", "1000", "1001", "900"], correct: 1 },
+    { q: "Hình tròn có bán kính 5cm, đường kính của hình tròn đó là?", a: ["5cm", "10cm", "15cm", "20cm"], correct: 1 },
+    { q: "7 nhân mấy bằng 63?", a: ["7", "8", "9", "6"], correct: 2 },
+    { q: "Kết quả của 96 : 3 là?", a: ["32", "33", "31", "30"], correct: 0 },
+    { q: "Một hình chữ nhật có chiều dài 8cm, chiều rộng 5cm. Chu vi là?", a: ["13cm", "40cm", "26cm", "20cm"], correct: 2 }
+];
 
-// ===== RANDOM 20 CÂU =====
-function generateQuiz() {
-  let quiz = [];
+let questions = [];
+let currentIdx = 0;
+let userAnswers = [];
 
-  for (let i = 0; i < 20; i++) {
-    let a = Math.floor(Math.random() * 900) + 100;
-    let b = Math.floor(Math.random() * 900) + 100;
+// Khởi tạo âm thanh
+const audioWin = new Audio('https://www.myinstants.com/media/sounds/applause.mp3');
+const audioLose = new Audio('https://www.myinstants.com/media/sounds/sad-meow-song.mp3');
 
-    let type = Math.floor(Math.random() * 4);
-    let question, correct;
+function stopAllAudio() {
+    audioWin.pause();
+    audioWin.currentTime = 0;
+    audioLose.pause();
+    audioLose.currentTime = 0;
+}
 
-    if (type === 0) {
-      question = `${a} + ${b} = ?`;
-      correct = a + b;
-    } else if (type === 1) {
-      if (a < b) [a, b] = [b, a];
-      question = `${a} - ${b} = ?`;
-      correct = a - b;
-    } else if (type === 2) {
-      b = Math.floor(Math.random() * 9) + 2;
-      question = `${a} x ${b} = ?`;
-      correct = a * b;
-    } else {
-      b = Math.floor(Math.random() * 9) + 2;
-      correct = a;
-      question = `${a * b} / ${b} = ?`;
-    }
+function prepareQuestions() {
+    let shuffled = [...questionBank].sort(() => 0.5 - Math.random());
+    questions = shuffled.slice(0, 10);
+    userAnswers = new Array(questions.length).fill(null);
+}
 
-    let answers = [correct];
-    while (answers.length < 4) {
-      let fake = correct + Math.floor(Math.random() * 50) - 25;
-      if (!answers.includes(fake)) answers.push(fake);
-    }
-
-    answers.sort(() => Math.random() - 0.5);
-
-    quiz.push({
-      question,
-      answers,
-      correct: answers.indexOf(correct)
+function initSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.innerHTML = '';
+    questions.forEach((_, i) => {
+        const btn = document.createElement('button');
+        btn.innerText = i + 1;
+        btn.id = `side-btn-${i}`;
+        btn.onclick = () => jumpToQuestion(i);
+        sidebar.appendChild(btn);
     });
-  }
-
-  return quiz;
 }
 
-// ===== STATE =====
-let quiz, current, userAnswers;
-
-// ===== START =====
 function startQuiz() {
-  document.getElementById("startScreen").style.display = "none";
-  document.getElementById("quizApp").style.display = "flex";
-
-  quiz = generateQuiz();
-  current = 0;
-  userAnswers = new Array(quiz.length).fill(null);
-
-  loadQuestion();
-  renderSidebar();
+    stopAllAudio();
+    document.getElementById('startScreen').style.display = 'none';
+    document.getElementById('quizApp').style.display = 'flex';
+    document.getElementById('resultBox').style.display = 'none';
+    document.getElementById('quizBody').style.display = 'block';
+    currentIdx = 0;
+    prepareQuestions();
+    initSidebar();
+    showQuestion();
 }
 
-// ===== LOAD QUESTION =====
-function loadQuestion() {
-  const q = quiz[current];
+function showQuestion() {
+    const q = questions[currentIdx];
+    document.getElementById('question').innerText = q.q;
+    document.getElementById('progressText').innerText = `${currentIdx + 1} / ${questions.length}`;
+    document.getElementById('progressBar').style.width = ((currentIdx + 1) / questions.length) * 100 + '%';
 
-  document.getElementById("question").innerText =
-    `Câu ${current + 1}: ${q.question}`;
-
-  let percent = ((current + 1) / quiz.length) * 100;
-  document.getElementById("progressBar").style.width = percent + "%";
-  document.getElementById("progressText").innerText =
-    `Câu ${current + 1} / ${quiz.length}`;
-
-  const div = document.getElementById("answers");
-  div.innerHTML = "";
-
-  q.answers.forEach((ans, i) => {
-    const btn = document.createElement("button");
-    btn.innerText = ans;
-
-    if (userAnswers[current] === i) {
-      btn.classList.add("selected");
-    }
-
-    btn.onclick = () => {
-      userAnswers[current] = i;
-      loadQuestion();
-      renderSidebar();
-    };
-
-    div.appendChild(btn);
-  });
-
-  updateButtons();
+    const answersDiv = document.getElementById('answers');
+    answersDiv.innerHTML = '';
+    q.a.forEach((text, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'answer-btn';
+        if (userAnswers[currentIdx] === i) btn.classList.add('selected');
+        btn.innerText = text;
+        btn.onclick = () => { userAnswers[currentIdx] = i; showQuestion(); };
+        answersDiv.appendChild(btn);
+    });
+    updateUI();
 }
 
-// ===== SIDEBAR =====
-function renderSidebar() {
-  const sidebar = document.getElementById("sidebar");
-  sidebar.innerHTML = "";
-
-  quiz.forEach((_, i) => {
-    const btn = document.createElement("button");
-    btn.innerText = i + 1;
-
-    if (userAnswers[i] !== null) btn.classList.add("answered");
-    if (i === current) btn.classList.add("active");
-
-    btn.onclick = () => {
-      current = i;
-      loadQuestion();
-      renderSidebar();
-    };
-
-    sidebar.appendChild(btn);
-  });
+function updateUI() {
+    questions.forEach((_, i) => {
+        const btn = document.getElementById(`side-btn-${i}`);
+        if(btn) {
+            btn.className = (i === currentIdx) ? 'active' : '';
+            if (userAnswers[i] !== null) btn.classList.add('answered');
+        }
+    });
+    document.getElementById('prevBtn').style.visibility = currentIdx === 0 ? 'hidden' : 'visible';
+    const isLast = currentIdx === questions.length - 1;
+    document.getElementById('nextBtn').style.display = isLast ? 'none' : 'block';
+    document.getElementById('submitBtn').style.display = isLast ? 'block' : 'none';
 }
 
-// ===== BUTTON =====
-function updateButtons() {
-  const nextBtn = document.getElementById("nextBtn");
-  const submitBtn = document.getElementById("submitBtn");
+function nextQuestion() { if (currentIdx < questions.length - 1) { currentIdx++; showQuestion(); } }
+function prevQuestion() { if (currentIdx > 0) { currentIdx--; showQuestion(); } }
+function jumpToQuestion(i) { currentIdx = i; showQuestion(); }
 
-  if (!userAnswers.includes(null)) {
-    nextBtn.style.display = "none";
-    submitBtn.style.display = "block";
-  } else {
-    nextBtn.style.display = "block";
-    submitBtn.style.display = "none";
-  }
-}
-
-function nextQuestion() {
-  if (current < quiz.length - 1) {
-    current++;
-    loadQuestion();
-    renderSidebar();
-  }
-}
-
-function prevQuestion() {
-  if (current > 0) {
-    current--;
-    loadQuestion();
-    renderSidebar();
-  }
-}
-
-// ===== NỘP BÀI =====
 function submitQuiz() {
-  let correct = 0;
-  let html = `<h2>Kết quả</h2>`;
+    const unanswered = userAnswers.filter(a => a === null).length;
+    if (unanswered > 0 && !confirm(`Còn ${unanswered} câu chưa làm. Nộp luôn?`)) return;
 
-  quiz.forEach((q, i) => {
-    let isCorrect = userAnswers[i] === q.correct;
-    if (isCorrect) correct++;
+    let score = 0;
+    questions.forEach((q, i) => { if (userAnswers[i] === q.correct) score++; });
 
-    html += `
-      <div style="margin:10px;padding:10px;border-radius:10px;
-      background:${isCorrect ? '#e8f5e9' : '#ffebee'}">
-      <b>Câu ${i+1}</b>: ${isCorrect ? "✔ Đúng" : "✖ Sai"}
-      </div>
-    `;
-  });
-
-  let score = (correct / quiz.length) * 10;
-
-  // 🔊 âm thanh
-  if (score >= 5) {
-    soundPass.play();
-  } else {
-    soundFail.play();
-  }
-
-  html = `
-    <h1>Điểm: ${score.toFixed(1)} / 10</h1>
-
-    <button onclick="restartQuiz()" 
-      style="padding:12px;margin:10px 0;background:#2196f3;color:white;border:none;border-radius:10px;">
-      🔄 Làm lại
-    </button>
-
-    <hr>
-  ` + html;
-
-  document.getElementById("quizApp").innerHTML = html;
+    // Hiển thị kết quả lên màn hình
+    document.getElementById('quizBody').style.display = 'none';
+    document.getElementById('resultBox').style.display = 'block';
+    document.getElementById('resultScore').innerText = `Điểm của bạn: ${score}/10`;
+    
+    if (score >= 5) {
+        audioWin.play();
+        document.getElementById('resultFeedback').innerText = "🎉 Tuyệt vời! Bạn đã vượt qua bài thi.";
+    } else {
+        audioLose.play();
+        document.getElementById('resultFeedback').innerText = "😢 Đừng buồn, hãy ôn tập và làm lại nhé!";
+    }
 }
 
-// ===== RESET KHÔNG LỖI =====
-function restartQuiz() {
-  quiz = generateQuiz();
-  current = 0;
-  userAnswers = new Array(quiz.length).fill(null);
-
-  document.getElementById("quizApp").innerHTML = `
-    <div class="sidebar" id="sidebar"></div>
-
-    <div class="quiz-container">
-
-      <div class="progress">
-        <div id="progressBar"></div>
-      </div>
-      <p id="progressText"></p>
-
-      <h2 id="question"></h2>
-      <div id="answers"></div>
-
-      <div class="buttons">
-        <button onclick="prevQuestion()">⬅ Quay lại</button>
-        <button id="nextBtn" onclick="nextQuestion()">Tiếp theo ➡</button>
-        <button id="submitBtn" onclick="submitQuiz()" style="display:none;">✅ Nộp bài</button>
-      </div>
-
-    </div>
-  `;
-
-  loadQuestion();
-  renderSidebar();
+function resetQuiz() {
+    startQuiz(); // Hàm này đã bao gồm stopAllAudio()
 }
-// ===== RUNG TẤT CẢ NÚT =====
-document.addEventListener("click", function(e) {
-  if (e.target.tagName === "BUTTON") {
-    e.target.classList.add("shake");
-
-    setTimeout(() => {
-      e.target.classList.remove("shake");
-    }, 250);
-  }
-});
