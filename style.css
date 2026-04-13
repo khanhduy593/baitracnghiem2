@@ -1,10 +1,15 @@
+/* --- 1. CẤU HÌNH MÀU SẮC & CHUNG --- */
 :root {
     --primary: #6c5ce7;
     --success: #00b894;
     --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+}
 
 body {
     margin: 0;
@@ -14,78 +19,100 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px;
+    padding: 15px;
 }
 
-/* START SCREEN */
-.start-screen { animation: fadeIn 0.8s ease; width: 100%; display: flex; justify-content: center; }
+/* --- 2. HIỆU ỨNG RUNG KHI NHẤN (SHAKE) --- */
+@keyframes click-shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-3px) rotate(-1deg); }
+    40% { transform: translateX(3px) rotate(1deg); }
+    60% { transform: translateX(-2px) rotate(-0.5deg); }
+    80% { transform: translateX(2px) rotate(0.5deg); }
+    100% { transform: translateX(0); }
+}
+
+/* Class này sẽ được JS thêm vào khi người dùng click */
+.shaking {
+    animation: click-shake 0.2s ease-in-out;
+}
+
+/* --- 3. GIAO DIỆN MÀN HÌNH CHÍNH --- */
+.start-screen { width: 100%; max-width: 400px; animation: fadeIn 0.8s ease; }
 .glass-card {
-    background: white; padding: 2.5rem; border-radius: 24px;
+    background: white; padding: 35px; border-radius: 25px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.2); text-align: center;
-    width: 100%; max-width: 400px;
 }
 .author span { color: var(--primary); font-weight: bold; }
+
 #startBtn {
-    width: 100%; padding: 16px; margin-top: 20px; background: var(--primary);
-    color: white; border: none; border-radius: 12px; font-weight: bold;
+    width: 100%; padding: 18px; margin-top: 20px; background: var(--primary);
+    color: white; border: none; border-radius: 15px; font-weight: bold;
     font-size: 1.1rem; cursor: pointer; transition: 0.3s;
 }
-#startBtn:active { transform: scale(0.95); }
 
-/* LAYOUT */
+/* --- 4. LAYOUT & SIDEBAR --- */
 .container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 15px; }
 
-/* SIDEBAR */
 .sidebar {
     display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
     background: rgba(255, 255, 255, 0.2); padding: 12px;
-    border-radius: 15px; backdrop-filter: blur(10px);
+    border-radius: 18px; backdrop-filter: blur(10px);
 }
 .sidebar button {
-    height: 40px; border-radius: 8px; border: none;
+    height: 42px; border-radius: 10px; border: none;
     background: rgba(255,255,255,0.3); color: white; font-weight: bold; cursor: pointer;
 }
-.sidebar button.active { background: white; color: var(--primary); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+.sidebar button.active { background: white; color: var(--primary); box-shadow: 0 0 15px rgba(255,255,255,0.4); }
 .sidebar button.answered { background: var(--success); }
 
-/* QUIZ CARD */
-.quiz-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-#question { font-size: 1.3rem; margin-bottom: 25px; color: #2d3436; line-height: 1.5; min-height: 60px; }
+/* --- 5. KHUNG CÂU HỎI & ĐÁP ÁN --- */
+.quiz-card { background: white; padding: 30px; border-radius: 25px; box-shadow: var(--shadow); min-height: 350px; }
+#question { font-size: 1.3rem; color: #2d3436; margin-bottom: 25px; line-height: 1.5; min-height: 60px; }
 
-/* 4 NÚT ĐÁP ÁN XẾP NGANG */
+/* Bố cục 4 nút xếp ngang trên PC, 2x2 trên Mobile */
 #answers { display: flex; flex-wrap: nowrap; gap: 12px; margin-bottom: 30px; }
+
 .answer-btn {
-    flex: 1; min-height: 80px; padding: 15px 10px;
-    background: #f8f9fa; border: 2px solid #eee; border-radius: 12px;
+    flex: 1; min-height: 80px; padding: 15px;
+    background: #f8f9fa; border: 2px solid #eee; border-radius: 15px;
     cursor: pointer; transition: all 0.2s ease;
     font-size: 1.1rem; font-weight: 600; color: #333;
+    display: flex; align-items: center; justify-content: center;
 }
 .answer-btn:hover { border-color: var(--primary); background: #f8f7ff; }
-.answer-btn.selected { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-3px); }
+.answer-btn.selected { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3); }
 
-/* PROGRESS */
-.progress-wrapper { background: white; padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 12px; margin-bottom: 5px; }
+/* --- 6. THANH TIẾN TRÌNH --- */
+.progress-wrapper { background: white; padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; gap: 12px; margin-bottom: 5px; box-shadow: var(--shadow); }
 .progress { flex: 1; height: 10px; background: #eee; border-radius: 10px; overflow: hidden; }
 #progressBar { height: 100%; background: var(--primary); width: 0%; transition: 0.4s; }
+#progressText { font-weight: bold; color: var(--primary); min-width: 40px; }
 
-/* NAVIGATION */
-.buttons { display: flex; gap: 10px; }
-.buttons button { flex: 1; padding: 15px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
+/* --- 7. NÚT ĐIỀU HƯỚNG --- */
+.buttons { display: flex; gap: 12px; }
+.buttons button { flex: 1; padding: 16px; border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; }
 #prevBtn { background: #b2bec3; }
 #nextBtn { background: #0984e3; }
 #submitBtn { background: var(--success); }
 
-/* RESULT */
+/* --- 8. KẾT QUẢ --- */
 .result-box { text-align: center; padding: 20px 0; }
-#resultScore { font-size: 3rem; color: var(--primary); margin: 10px 0; }
-.retry-btn { width: 100%; max-width: 250px; padding: 15px; background: var(--success); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+#resultScore { font-size: 3.5rem; color: var(--primary); margin: 15px 0; font-weight: 800; }
+.retry-btn { width: 100%; max-width: 250px; padding: 16px; background: var(--success); color: white; border: none; border-radius: 15px; font-weight: bold; cursor: pointer; }
 
-/* RESPONSIVE */
+/* --- 9. TỐI ƯU CHO ĐIỆN THOẠI --- */
 @media (max-width: 768px) {
-    #answers { display: grid; grid-template-columns: 1fr 1fr; } /* 2x2 trên mobile */
-    .answer-btn { min-height: 70px; }
+    #answers {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Chia 2 cột x 2 hàng */
+        gap: 10px;
+    }
+    .answer-btn { min-height: 70px; font-size: 1rem; }
+    .quiz-card { padding: 20px; }
 }
 
+/* --- 10. TỐI ƯU CHO MÁY TÍNH --- */
 @media (min-width: 769px) {
     .container { flex-direction: row; align-items: flex-start; }
     .sidebar { width: 180px; grid-template-columns: repeat(3, 1fr); }
