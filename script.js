@@ -1,4 +1,4 @@
-// 1. NGÂN HÀNG 60 CÂU HỎI TOÁN LỚP 3
+// 1. NGÂN HÀNG 100 CÂU HỎI TOÁN LỚP 3
 const questionBank = [
     { q: "Kết quả của phép tính: 452 + 316 là?", a: ["768", "769", "758", "668"], correct: 0 },
     { q: "Tìm x, biết: x : 4 = 12", a: ["x = 3", "x = 8", "x = 48", "x = 16"], correct: 2 },
@@ -59,9 +59,50 @@ const questionBank = [
     { q: "Số liền trước của 10.000 là?", a: ["9.000", "9.900", "9.990", "9.999"], correct: 3 },
     { q: "36 : 4 x 3 = ?", a: ["3", "27", "9", "12"], correct: 1 },
     { q: "Số nhỏ nhất có 5 chữ số là?", a: ["1000", "9999", "10000", "11111"], correct: 2 },
-    { q: "Bạn An có 10 viên bi, Bình có gấp đôi An. Cả hai có?", a: ["20 viên", "30 viên", "15 viên", "40 viên"], correct: 1 }
+    { q: "Bạn An có 10 viên bi, Bình có gấp đôi An. Cả hai có?", a: ["20 viên", "30 viên", "15 viên", "40 viên"], correct: 1 },
+    { q: "Số gồm 8 nghìn và 8 đơn vị viết là?", a: ["8800", "8008", "8080", "880"], correct: 1 },
+    { q: "Giá trị của x trong x * 5 = 45 là?", a: ["40", "50", "9", "8"], correct: 2 },
+    { q: "1/4 của 1 giờ là bao nhiêu phút?", a: ["10 phút", "15 phút", "20 phút", "25 phút"], correct: 1 },
+    { q: "Diện tích hình chữ nhật có dài 8cm, rộng 4cm là?", a: ["12cm2", "32cm2", "24cm2", "16cm2"], correct: 1 },
+    { q: "Số 9035 đọc là?", a: ["Chín mươi ba lăm", "Chín nghìn không trăm ba mươi lăm", "Chín nghìn ba mươi lăm", "Chín trăm ba mươi lăm"], correct: 1 },
+    { q: "Kết quả phép tính 1500 + 2500 là?", a: ["3000", "3500", "4000", "4500"], correct: 2 },
+    { q: "7m 3dm = ... dm?", a: ["703", "73", "37", "730"], correct: 1 },
+    { q: "Số dư của phép chia 17 : 3 là?", a: ["1", "2", "3", "0"], correct: 1 },
+    { q: "Hình vuông có chu vi 32cm, cạnh của nó là?", a: ["6cm", "7cm", "8cm", "9cm"], correct: 2 },
+    { q: "Một tuần có bao nhiêu ngày?", a: ["5 ngày", "6 ngày", "7 ngày", "8 ngày"], correct: 2 },
+    { q: "Trong các số: 4567, 4576, 4657, 4675. Số bé nhất là?", a: ["4567", "4576", "4657", "4675"], correct: 0 },
+    { q: "Kết quả của 100 - 50 : 2 là?", a: ["25", "75", "50", "0"], correct: 1 },
+    { q: "81 : 9 + 10 = ?", a: ["19", "20", "21", "18"], correct: 0 },
+    { q: "Số 10.000 đọc là?", a: ["Một nghìn", "Mười nghìn", "Một vạn", "Cả B và C đều đúng"], correct: 3 },
+    { q: "5 thế kỷ bằng bao nhiêu năm?", a: ["50 năm", "500 năm", "5000 năm", "5 năm"], correct: 1 },
+    { q: "Số chẵn liền sau 24 là?", a: ["25", "26", "23", "27"], correct: 1 },
+    { q: "Số lẻ liền trước 31 là?", a: ["30", "32", "29", "28"], correct: 2 },
+    { q: "Tìm x: x + 200 = 500", a: ["x=700", "x=300", "x=200", "x=400"], correct: 1 },
+    { q: "Một bàn tay có 5 ngón, 10 bàn tay có?", a: ["15 ngón", "50 ngón", "25 ngón", "100 ngón"], correct: 1 },
+    { q: "Số gồm 3 nghìn, 4 trăm và 5 đơn vị?", a: ["345", "3405", "3450", "3045"], correct: 1 },
+    { q: "Nửa chu vi hình chữ nhật là 15cm. Chu vi là?", a: ["15cm", "30cm", "45cm", "60cm"], correct: 1 },
+    { q: "Số lớn nhất có 3 chữ số là?", a: ["100", "900", "999", "1000"], correct: 2 },
+    { q: "Phép nhân 222 x 3 bằng?", a: ["666", "606", "660", "600"], correct: 0 },
+    { q: "6m = ... mm?", a: ["60mm", "600mm", "6000mm", "60000mm"], correct: 2 },
+    { q: "40 : 5 * 2 = ?", a: ["4", "16", "20", "8"], correct: 1 },
+    { q: "Tháng 1 có bao nhiêu ngày?", a: ["28", "29", "30", "31"], correct: 3 },
+    { q: "Đồng hồ chỉ 12 giờ kém 15 là mấy giờ?", a: ["12:15", "11:45", "11:15", "12:45"], correct: 1 },
+    { q: "1kg bông và 1kg sắt, cái nào nặng hơn?", a: ["Bông", "Sắt", "Bằng nhau", "Không so được"], correct: 2 },
+    { q: "Số nào chia hết cho 2?", a: ["123", "456", "789", "101"], correct: 1 },
+    { q: "Tìm x: 80 - x = 20", a: ["x=100", "x=60", "x=40", "x=50"], correct: 1 },
+    { q: "Kết quả của 70 * 4 là?", a: ["210", "280", "140", "350"], correct: 1 },
+    { q: "Số có 4 chữ số, hàng nghìn là 9, các hàng khác là 0?", a: ["900", "9000", "9999", "9001"], correct: 1 },
+    { q: "Một năm có bao nhiêu tháng?", a: ["10", "11", "12", "13"], correct: 2 },
+    { q: "Chu vi tam giác có cạnh 3cm, 4cm, 5cm là?", a: ["12cm", "7cm", "9cm", "15cm"], correct: 0 },
+    { q: "Mẹ có 50k, mua rau hết 20k. Còn lại?", a: ["10k", "20k", "30k", "40k"], correct: 2 },
+    { q: "Số tròn chục liền sau 80 là?", a: ["70", "90", "81", "100"], correct: 1 },
+    { q: "200 * 4 + 100 = ?", a: ["800", "900", "700", "1000"], correct: 1 },
+    { q: "1/5 của 100 là?", a: ["10", "20", "30", "25"], correct: 1 },
+    { q: "Gấp 10 lên 10 lần được?", a: ["20", "100", "0", "110"], correct: 1 },
+    { q: "Số bé nhất có 1 chữ số là?", a: ["0", "1", "9", "10"], correct: 0 }
 ];
 
+// 2. BIẾN TOÀN CỤC
 let questions = [], currentIdx = 0, userAnswers = [];
 
 // Khởi tạo âm thanh
@@ -72,7 +113,7 @@ function stopAudio() {
     [audioWin, audioLose].forEach(a => { a.pause(); a.currentTime = 0; }); 
 }
 
-// 2. HÀM TẠO HIỆU ỨNG RUNG
+// 3. HIỆU ỨNG RUNG
 function applyShake(element) {
     if (!element) return;
     element.classList.remove('shaking');
@@ -80,7 +121,7 @@ function applyShake(element) {
     element.classList.add('shaking');
 }
 
-// 3. LOGIC QUIZ
+// 4. LOGIC CHÍNH
 function startQuiz() {
     const btn = document.getElementById('startBtn');
     applyShake(btn);
@@ -93,8 +134,12 @@ function startQuiz() {
         document.getElementById('quizBody').style.display = 'block';
         
         currentIdx = 0;
-        // Bốc 10 câu ngẫu nhiên từ ngân hàng 60 câu
-        questions = [...questionBank].sort(() => 0.5 - Math.random()).slice(0, 10);
+        
+        // --- LOGIC RANDOM 10 CÂU TỪ 100 CÂU ---
+        questions = [...questionBank]
+            .sort(() => Math.random() - 0.5) // Trộn ngẫu nhiên danh sách 100 câu
+            .slice(0, 10);                   // Lấy 10 câu đầu tiên sau khi trộn
+            
         userAnswers = new Array(10).fill(null);
         
         initSidebar();
@@ -149,7 +194,6 @@ function renderAnswers() {
             applyShake(e.currentTarget);
             userAnswers[currentIdx] = i; 
             
-            // Chờ rung một chút rồi mới cập nhật giao diện
             setTimeout(() => {
                 renderAnswers(); 
                 updateUI();
@@ -208,18 +252,18 @@ function submitQuiz() {
 
         document.getElementById('quizBody').style.display = 'none';
         document.getElementById('resultBox').style.display = 'block';
-        document.getElementById('resultScore').innerText = `Điểm: ${score}/10`;
+        document.getElementById('resultScore').innerText = `Điểm của bạn: ${score}/10`;
 
         if(score >= 5) {
             audioWin.play();
-            document.getElementById('resultFeedback').innerText = "🎉 Tuyệt vời! Bạn làm rất tốt.";
+            document.getElementById('resultFeedback').innerText = "🎉 Tuyệt vời! Bạn đã vượt qua thử thách.";
         } else {
             audioLose.play();
-            document.getElementById('resultFeedback').innerText = "😢 Đừng buồn, hãy ôn tập và thử lại nhé!";
+            document.getElementById('resultFeedback').innerText = "😢 Cố gắng hơn vào lần sau nhé!";
         }
     }, 200);
 }
 
 function resetQuiz() {
-    startQuiz();
+    startQuiz(); // Hàm này sẽ tự động bốc 10 câu mới
 }
